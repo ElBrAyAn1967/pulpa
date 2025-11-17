@@ -8,10 +8,10 @@ import type { NFCStatus } from '@/lib/types/ambassador';
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { nfcId: string } }
+  { params }: { params: Promise<{ nfcId: string }> }
 ) {
   try {
-    const { nfcId } = params;
+    const { nfcId } = await params;
 
     // Validate NFC ID format
     const validation = validateNFCId(nfcId);

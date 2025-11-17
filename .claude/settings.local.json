@@ -15,7 +15,9 @@
       "Bash(git push:*)",
       "Bash(npm run build:*)",
       "Bash(echo:*)",
-      "Bash(README.md)"
+      "Bash(README.md)",
+      "Bash(bun run build:*)",
+      "Bash(NODE_ENV=production npm run build:*)"
     ],
     "deny": [],
     "ask": []
