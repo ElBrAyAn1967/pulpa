@@ -10,7 +10,9 @@
       "Bash(curl:*)",
       "Bash(rm:*)",
       "Bash(bun run dev)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)"
     ],
     "deny": [],
     "ask": []
