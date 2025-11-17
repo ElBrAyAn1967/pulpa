@@ -20,7 +20,7 @@ This document outlines the implementation scope for the $PULPA ERC20 token distr
 
 **Technology Stack:**
 
-- Frontend/Backend: Scaffold-ETH 2 (Next.js)
+- Frontend/Backend: (Next.js)
 - Blockchain Integration: Wagmi v2, Viem, RainbowKit
 - Indexer: Envio Indexer
 - Smart Contract: Existing deployed ERC20 (PulpaToken.sol)

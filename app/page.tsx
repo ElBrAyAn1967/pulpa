@@ -1,165 +1,170 @@
+import Link from 'next/link';
+
 export default function Home() {
   return (
     <div className="page">
       <div className="container space-y-12">
-        {/* Hero Section */}
+        {/* Header */}
         <section className="text-center space-y-6">
-          <h1 className="text-primary">Frutero App Color Palette</h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Explora la vibrante paleta de colores inspirada en frutas frescas.
-            Esta aplicación usa los mismos colores que Frutero App.
+          <h1 className="text-primary">$PULPA NFC Distribution System</h1>
+          <p className="text-muted-foreground max-w-2xl mx-auto">
+            Sistema de distribución de tokens $PULPA mediante NFC stickers.
+            Embajadores distribuyen tokens a nuevos usuarios escaneando NFC tags.
           </p>
         </section>
 
-        {/* Color Showcase */}
-        <section className="section space-y-8">
-          <h2>Colores Principales</h2>
+        {/* Demo Section */}
+        <section className="space-y-6">
+          <h2 className="text-2xl font-bold text-foreground text-center">
+            Demo de Funcionalidades
+          </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* Primary */}
-            <div className="bg-card rounded-lg p-6 space-y-4 border border-border">
-              <div className="h-24 bg-primary rounded-lg flex items-center justify-center">
-                <span className="text-primary-foreground font-semibold">Primary</span>
-              </div>
-              <div>
-                <p className="font-medium">Naranja Vibrante</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+            {/* Test NFC - Registered */}
+            <Link
+              href="/nfc/TEST123"
+              className="p-6 bg-card rounded-lg border border-border hover:border-primary transition-colors cursor-pointer"
+            >
+              <div className="space-y-3">
+                <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                  <span className="text-2xl">✅</span>
+                </div>
+                <h3 className="font-bold text-foreground">
+                  NFC Registrado (TEST123)
+                </h3>
                 <p className="text-sm text-muted-foreground">
-                  Color principal para acciones importantes
+                  Simula el escaneo de un NFC ya registrado. Te enviará a la página de distribución.
                 </p>
+                <div className="flex items-center gap-2 text-xs text-accent">
+                  <span>Embajador:</span>
+                  <span className="font-mono">El Frutero 🍎</span>
+                </div>
               </div>
+            </Link>
+
+            {/* Test NFC - New */}
+            <Link
+              href="/nfc/NUEVONFC123"
+              className="p-6 bg-card rounded-lg border border-border hover:border-primary transition-colors cursor-pointer"
+            >
+              <div className="space-y-3">
+                <div className="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center">
+                  <span className="text-2xl">➕</span>
+                </div>
+                <h3 className="font-bold text-foreground">
+                  NFC Nuevo (NUEVONFC123)
+                </h3>
+                <p className="text-sm text-muted-foreground">
+                  Simula el escaneo de un NFC sin registrar. Te llevará al formulario de registro.
+                </p>
+                <div className="flex items-center gap-2 text-xs text-primary">
+                  <span>Estado:</span>
+                  <span>Sin embajador asignado</span>
+                </div>
+              </div>
+            </Link>
+          </div>
+        </section>
+
+        {/* Features Section */}
+        <section className="space-y-6">
+          <h2 className="text-2xl font-bold text-foreground text-center">
+            Funcionalidades Implementadas
+          </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto">
+            <div className="p-4 bg-card rounded-lg border border-border">
+              <div className="text-3xl mb-2">✅</div>
+              <h4 className="font-semibold text-foreground mb-2">
+                Ticket 1.1: NFC Landing Page
+              </h4>
+              <ul className="text-sm text-muted-foreground space-y-1">
+                <li>• Validación de NFC ID</li>
+                <li>• Detección de estado</li>
+                <li>• Routing automático</li>
+                <li>• Estados de carga y error</li>
+              </ul>
             </div>
 
-            {/* Secondary */}
-            <div className="bg-card rounded-lg p-6 space-y-4 border border-border">
-              <div className="h-24 bg-secondary rounded-lg flex items-center justify-center">
-                <span className="text-secondary-foreground font-semibold">Secondary</span>
-              </div>
-              <div>
-                <p className="font-medium">Marrón Rico</p>
-                <p className="text-sm text-muted-foreground">
-                  Para acciones secundarias
-                </p>
-              </div>
+            <div className="p-4 bg-card rounded-lg border border-border">
+              <div className="text-3xl mb-2">✅</div>
+              <h4 className="font-semibold text-foreground mb-2">
+                Ticket 1.2: Formulario de Registro
+              </h4>
+              <ul className="text-sm text-muted-foreground space-y-1">
+                <li>• Resolución de ENS</li>
+                <li>• Selector de frutas emoji</li>
+                <li>• Validación completa</li>
+                <li>• Avatar ENS (opcional)</li>
+              </ul>
             </div>
 
-            {/* Accent */}
-            <div className="bg-card rounded-lg p-6 space-y-4 border border-border">
-              <div className="h-24 bg-accent rounded-lg flex items-center justify-center">
-                <span className="text-accent-foreground font-semibold">Accent</span>
-              </div>
-              <div>
-                <p className="font-medium">Verde Fresco</p>
-                <p className="text-sm text-muted-foreground">
-                  Para destacar elementos especiales
-                </p>
-              </div>
-            </div>
-
-            {/* Muted */}
-            <div className="bg-card rounded-lg p-6 space-y-4 border border-border">
-              <div className="h-24 bg-muted rounded-lg flex items-center justify-center">
-                <span className="text-muted-foreground font-semibold">Muted</span>
-              </div>
-              <div>
-                <p className="font-medium">Gris Silenciado</p>
-                <p className="text-sm text-muted-foreground">
-                  Para elementos de fondo
-                </p>
-              </div>
-            </div>
-
-            {/* Destructive */}
-            <div className="bg-card rounded-lg p-6 space-y-4 border border-border">
-              <div className="h-24 bg-destructive rounded-lg flex items-center justify-center">
-                <span className="text-white font-semibold">Destructive</span>
-              </div>
-              <div>
-                <p className="font-medium">Rojo Tomate</p>
-                <p className="text-sm text-muted-foreground">
-                  Para errores y acciones destructivas
-                </p>
-              </div>
-            </div>
-
-            {/* Card */}
-            <div className="bg-card rounded-lg p-6 space-y-4 border border-border">
-              <div className="h-24 rounded-lg flex items-center justify-center border-2 border-dashed border-border">
-                <span className="text-card-foreground font-semibold">Card</span>
-              </div>
-              <div>
-                <p className="font-medium">Tarjeta</p>
-                <p className="text-sm text-muted-foreground">
-                  Fondo de tarjetas y contenedores
-                </p>
-              </div>
+            <div className="p-4 bg-card rounded-lg border border-dashed border-border">
+              <div className="text-3xl mb-2">🚧</div>
+              <h4 className="font-semibold text-foreground mb-2">
+                Próximos Tickets
+              </h4>
+              <ul className="text-sm text-muted-foreground space-y-1">
+                <li>• Base de datos Prisma (1.3)</li>
+                <li>• Perfil embajador (1.5)</li>
+                <li>• Distribución tokens (Epic 2)</li>
+              </ul>
             </div>
           </div>
         </section>
 
-        {/* Button Examples */}
-        <section className="section space-y-8">
-          <h2>Ejemplos de Botones</h2>
+        {/* Technical Stack */}
+        <section className="space-y-6">
+          <h2 className="text-2xl font-bold text-foreground text-center">
+            Stack Tecnológico
+          </h2>
 
-          <div className="flex flex-wrap gap-4">
-            <button className="px-6 py-3 bg-primary text-primary-foreground rounded-full font-medium hover:opacity-90 transition-opacity">
-              Botón Primario
-            </button>
-            <button className="px-6 py-3 bg-secondary text-secondary-foreground rounded-full font-medium hover:opacity-90 transition-opacity">
-              Botón Secundario
-            </button>
-            <button className="px-6 py-3 bg-accent text-accent-foreground rounded-full font-medium hover:opacity-90 transition-opacity">
-              Botón de Acento
-            </button>
-            <button className="px-6 py-3 bg-muted text-muted-foreground rounded-full font-medium hover:opacity-90 transition-opacity">
-              Botón Silenciado
-            </button>
-            <button className="px-6 py-3 bg-destructive text-white rounded-full font-medium hover:opacity-90 transition-opacity">
-              Botón Destructivo
-            </button>
-            <button className="px-6 py-3 border border-border text-foreground rounded-full font-medium hover:bg-muted transition-colors">
-              Botón Outline
-            </button>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+            {[
+              { name: 'Next.js 16', emoji: '⚛️' },
+              { name: 'Tailwind CSS 4', emoji: '🎨' },
+              { name: 'Wagmi v2', emoji: '🔗' },
+              { name: 'Viem', emoji: '⚡' },
+              { name: 'RainbowKit', emoji: '🌈' },
+              { name: 'Hardhat', emoji: '⛑️' },
+              { name: 'Optimism', emoji: '🔴' },
+              { name: 'PostgreSQL', emoji: '🐘' },
+            ].map((tech) => (
+              <div
+                key={tech.name}
+                className="p-4 bg-card rounded-lg text-center border border-border"
+              >
+                <div className="text-3xl mb-2">{tech.emoji}</div>
+                <p className="text-sm font-medium text-foreground">
+                  {tech.name}
+                </p>
+              </div>
+            ))}
           </div>
         </section>
 
-        {/* Typography */}
-        <section className="section space-y-8">
-          <h2>Tipografía</h2>
+        {/* Info Section */}
+        <section className="max-w-2xl mx-auto space-y-4 p-6 bg-card rounded-lg border border-border">
+          <h3 className="font-bold text-foreground text-center">
+            ℹ️ Información del Proyecto
+          </h3>
 
-          <div className="space-y-4">
-            <h1>Heading 1 - Grande y prominente</h1>
-            <h2>Heading 2 - Para secciones</h2>
-            <h3>Heading 3 - Para subsecciones</h3>
-            <h4>Heading 4 - Para títulos pequeños</h4>
-            <p className="text-foreground">
-              Texto normal con el color foreground principal.
-            </p>
-            <p className="text-muted-foreground">
-              Texto silenciado para información secundaria.
-            </p>
-            <a href="#" className="text-primary hover:underline">
-              Enlace con color primario
-            </a>
-          </div>
-        </section>
-
-        {/* Cards */}
-        <section className="section space-y-8">
-          <h2>Tarjetas</h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-card border border-border rounded-lg p-6">
-              <h3 className="mb-2">Tarjeta Normal</h3>
-              <p className="text-muted-foreground">
-                Esta es una tarjeta con el fondo card y borde border.
-              </p>
+          <div className="space-y-3 text-sm text-muted-foreground">
+            <div className="flex justify-between">
+              <span className="font-medium">Token:</span>
+              <span>$PULPA (ERC20)</span>
             </div>
-
-            <div className="bg-muted rounded-lg p-6">
-              <h3 className="mb-2">Tarjeta Silenciada</h3>
-              <p className="text-muted-foreground">
-                Esta tarjeta usa el fondo muted para menos énfasis.
-              </p>
+            <div className="flex justify-between">
+              <span className="font-medium">Chain:</span>
+              <span>Optimism Mainnet (Chain ID: 10)</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="font-medium">Contract:</span>
+              <span className="font-mono text-xs">0x029263...C2f30</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="font-medium">Distribución:</span>
+              <span>1 $PULPA (embajador) + 5 $PULPA (usuario)</span>
             </div>
           </div>
         </section>
@@ -178,7 +183,7 @@ export default function Home() {
             </a>
           </p>
           <p className="mt-2">
-            Integrado con Hardhat para desarrollo Web3
+            Sistema de distribución NFC para tokens $PULPA
           </p>
         </footer>
       </div>
