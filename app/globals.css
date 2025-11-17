@@ -1,0 +1,182 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --card-background-color: var(--card-background-color);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  /* Frutero App Color Palette */
+  --radius: 0.65rem;
+
+  /* Light Mode - Warm & Fruity Colors */
+  --background: oklch(0.9895 0.009 78.28);        /* Warm cream background */
+  --foreground: oklch(0.0969 0 0);                /* Dark text */
+  --card: oklch(0.9851 0 0);                      /* White cards */
+  --card-foreground: oklch(0.0969 0 0);           /* Dark card text */
+  --card-background-color: #fcf2e9;               /* Peachy card background */
+  --popover: oklch(0.9851 0 0);                   /* White popover */
+  --popover-foreground: oklch(0.0969 0 0);        /* Dark popover text */
+
+  /* Primary - Vibrant Orange (like fresh fruits) */
+  --primary: oklch(0.7652 0.1752 62.57);          /* Bright orange */
+  --primary-foreground: oklch(0.9851 0 0);        /* White text on primary */
+
+  /* Secondary - Rich Brown */
+  --secondary: oklch(0.6519 0.2118 22.71);        /* Warm brown */
+  --secondary-foreground: oklch(0.9851 0 0);      /* White text on secondary */
+
+  /* Muted - Subtle Gray */
+  --muted: oklch(0.274 0.006 286.033);            /* Dark muted */
+  --muted-foreground: oklch(0.6467 0 0);          /* Medium gray text */
+
+  /* Accent - Fresh Green */
+  --accent: oklch(0.7989 0.1902 126.36);          /* Bright green */
+  --accent-foreground: oklch(0.0969 0 0);         /* Dark text on accent */
+
+  /* Destructive - Tomato Red */
+  --destructive: oklch(0.704 0.191 22.216);       /* Red for errors */
+
+  /* Borders & Inputs */
+  --input: oklch(1 0 0 / 15%);                    /* Light input border */
+  --border: oklch(1 0 0 / 15%);                   /* Light border */
+  --ring: oklch(0.554 0.135 66.442);              /* Orange focus ring */
+
+  /* Chart Colors */
+  --chart-1: oklch(0.488 0.243 264.376);          /* Purple */
+  --chart-2: oklch(0.696 0.17 162.48);            /* Teal */
+  --chart-3: oklch(0.769 0.188 70.08);            /* Yellow */
+  --chart-4: oklch(0.627 0.265 303.9);            /* Pink */
+  --chart-5: oklch(0.645 0.246 16.439);           /* Coral */
+}
+
+.dark {
+  /* Dark Mode - Rich & Deep Colors */
+  --background: oklch(0.141 0.005 285.823);       /* Very dark gray */
+  --foreground: oklch(0.985 0 0);                 /* Almost white text */
+  --card: oklch(0.21 0.006 285.885);              /* Dark card */
+  --card-foreground: oklch(0.985 0 0);            /* Light card text */
+  --card-background-color: #2a2a2a;               /* Dark card background */
+  --popover: oklch(0.21 0.006 285.885);           /* Dark popover */
+  --popover-foreground: oklch(0.985 0 0);         /* Light popover text */
+
+  /* Primary - Warm Yellow/Orange */
+  --primary: oklch(0.795 0.184 86.047);           /* Warm yellow */
+  --primary-foreground: oklch(0.421 0.095 57.708);/* Darker contrast text */
+
+  /* Secondary - Dark Gray */
+  --secondary: oklch(0.274 0.006 286.033);        /* Medium dark */
+  --secondary-foreground: oklch(0.985 0 0);       /* Light text */
+
+  /* Muted - Dark Gray */
+  --muted: oklch(0.274 0.006 286.033);            /* Dark muted */
+  --muted-foreground: oklch(0.705 0.015 286.067); /* Light muted text */
+
+  /* Accent - Dark Gray Accent */
+  --accent: oklch(0.274 0.006 286.033);           /* Dark accent */
+  --accent-foreground: oklch(0.985 0 0);          /* Light text on accent */
+
+  /* Destructive - Same Red */
+  --destructive: oklch(0.704 0.191 22.216);       /* Red for errors */
+
+  /* Borders & Inputs */
+  --border: oklch(1 0 0 / 10%);                   /* Subtle dark border */
+  --input: oklch(1 0 0 / 15%);                    /* Subtle input border */
+  --ring: oklch(0.554 0.135 66.442);              /* Orange focus ring */
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  button {
+    @apply rounded-full;
+  }
+
+  .page {
+    @apply flex h-full w-full flex-col items-center pt-2 pb-8 md:py-12 lg:pb-16;
+  }
+
+  .container {
+    @apply flex w-full max-w-3xl flex-col items-center px-4 sm:px-6 lg:max-w-7xl lg:px-8;
+  }
+
+  .section {
+    @apply w-full md:max-w-screen-sm lg:max-w-screen-md xl:max-w-screen-lg 2xl:max-w-screen-xl;
+  }
+
+  h1 {
+    @apply text-5xl !leading-[1.2] font-medium tracking-tight;
+  }
+
+  h2 {
+    @apply text-4xl !leading-[1.2] font-medium tracking-tight;
+  }
+
+  h3 {
+    @apply text-3xl;
+  }
+
+  h4 {
+    @apply text-xl;
+  }
+
+  a {
+    @apply text-primary hover:underline;
+  }
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-gradient {
+  animation: gradient 15s ease infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%) skewX(-12deg);
+  }
+  100% {
+    transform: translateX(200%) skewX(-12deg);
+  }
+}
