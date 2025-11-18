@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { prisma } from '@/lib/db/prisma';
 import { validateNFCId } from '@/lib/utils/nfc';
 import type { NFCStatus } from '@/lib/types/ambassador';
 
@@ -22,39 +23,7 @@ export async function GET(
       );
     }
 
-    // TODO: Replace with actual Prisma query when database is set up
-    // For now, return mock data for development
-    const mockAmbassadors: Record<string, any> = {
-      'TEST123': {
-        id: '1',
-        displayName: 'El Frutero',
-        walletAddress: '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb',
-        favoriteFruit: '🍎',
-        totalDistributions: 5,
-        totalPulpaMinted: '5',
-      },
-      'NFC001': {
-        id: '2',
-        displayName: 'Pulpa Master',
-        walletAddress: '0x1234567890123456789012345678901234567890',
-        favoriteFruit: '🍊',
-        totalDistributions: 12,
-        totalPulpaMinted: '12',
-      },
-    };
-
-    const ambassador = mockAmbassadors[nfcId];
-
-    const response: NFCStatus = {
-      nfcId,
-      isRegistered: !!ambassador,
-      ambassador: ambassador || undefined,
-    };
-
-    return NextResponse.json(response);
-
-    /*
-    // Uncomment when Prisma is configured:
+    // Query database for ambassador
     const ambassador = await prisma.ambassador.findUnique({
       where: { nfcId },
       select: {
@@ -65,17 +34,22 @@ export async function GET(
         favoriteFruit: true,
         totalDistributions: true,
         totalPulpaMinted: true,
+        createdAt: true,
+        updatedAt: true,
       },
     });
 
     const response: NFCStatus = {
       nfcId,
       isRegistered: !!ambassador,
-      ambassador: ambassador || undefined,
+      ambassador: ambassador ? {
+        ...ambassador,
+        createdAt: ambassador.createdAt.toISOString(),
+        updatedAt: ambassador.updatedAt.toISOString(),
+      } : undefined,
     };
 
     return NextResponse.json(response);
-    */
   } catch (error) {
     console.error('NFC status check error:', error);
     return NextResponse.json(
