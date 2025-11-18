@@ -1,0 +1,51 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Ambassador {
+  id                 String         @id @default(cuid())
+  nfcId              String         @unique
+  walletAddress      String         @unique
+  ensName            String?
+  displayName        String
+  favoriteFruit      String         // Emoji character
+  totalDistributions Int            @default(0)
+  totalPulpaMinted   String         @default("0") // BigInt as string
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+
+  distributions      Distribution[]
+
+  @@index([nfcId])
+  @@index([walletAddress])
+  @@map("ambassadors")
+}
+
+model Distribution {
+  id            String    @id @default(cuid())
+  ambassadorId  String
+  ambassador    Ambassador @relation(fields: [ambassadorId], references: [id])
+  
+  recipientAddress String
+  pulpaAmount      String  // BigInt as string (5 PULPA for recipient)
+  ambassadorReward String  // BigInt as string (1 PULPA for ambassador)
+  
+  txHash           String  @unique
+  blockNumber      BigInt
+  timestamp        DateTime
+  
+  createdAt        DateTime @default(now())
+
+  @@index([ambassadorId])
+  @@index([recipientAddress])
+  @@index([timestamp])
+  @@map("distributions")
+}
