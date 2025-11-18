@@ -1,8 +1,4 @@
 {
-  "buildCommand": "next build",
-  "devCommand": "next dev",
-  "installCommand": "npm install",
-  "framework": "nextjs",
-  "outputDirectory": ".next",
-  "ignoreCommand": "git diff --quiet HEAD^ HEAD ./"
+  "buildCommand": "next build --webpack",
+  "framework": "nextjs"
 }
