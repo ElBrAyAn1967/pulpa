@@ -17,7 +17,12 @@
       "Bash(echo:*)",
       "Bash(README.md)",
       "Bash(bun run build:*)",
-      "Bash(NODE_ENV=production npm run build:*)"
+      "Bash(NODE_ENV=production npm run build:*)",
+      "Bash(bun add:*)",
+      "Bash(bunx prisma init:*)",
+      "Bash(npx prisma:*)",
+      "Bash(PRISMA_USER_CONSENT_FOR_DANGEROUS_AI_ACTION=\"si\" npx prisma migrate reset:*)",
+      "Bash(bun run:*)"
     ],
     "deny": [],
     "ask": []
