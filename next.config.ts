@@ -26,6 +26,21 @@ const nextConfig: NextConfig = {
       loader: 'ignore-loader',
     });
 
+    // Ignore optional React Native dependencies that aren't needed for web
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@react-native-async-storage/async-storage': false,
+      'pino-pretty': false,
+    };
+
+    // Ignore missing optional dependencies warnings
+    config.ignoreWarnings = [
+      { module: /node_modules\/@metamask\/sdk/ },
+      { module: /node_modules\/pino/ },
+      /Can't resolve '@react-native-async-storage\/async-storage'/,
+      /Can't resolve 'pino-pretty'/,
+    ];
+
     return config;
   },
 
