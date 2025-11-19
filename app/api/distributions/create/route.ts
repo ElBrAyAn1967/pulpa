@@ -3,6 +3,8 @@ import { prisma } from '@/lib/db/prisma';
 import { distributionRequestSchema } from '@/lib/validations/distribution';
 import { getTreasuryService } from '@/lib/services/TreasuryService';
 import { DISTRIBUTION_STATUS } from '@/lib/types/distribution';
+import { checkDistributionSecurity } from '@/lib/security/distribution-checks';
+import { nfcRateLimiter } from '@/lib/security/rate-limiter';
 import type { Address } from 'viem';
 
 export async function POST(request: NextRequest) {
@@ -39,23 +41,51 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check for duplicate distribution to same recipient
-    const existingDistribution = await prisma.distribution.findFirst({
-      where: {
-        ambassadorId: ambassador.id,
-        recipientAddress: recipientAddress.toLowerCase(),
-        status: DISTRIBUTION_STATUS.SUCCESS,
-      },
-    });
+    // SECURITY CHECKS
+    // 1. In-memory rate limit check (fast, first line of defense)
+    if (nfcRateLimiter.isRateLimited(nfcId)) {
+      const rateLimitInfo = nfcRateLimiter.getRateLimitInfo(nfcId);
 
-    if (existingDistribution) {
       return NextResponse.json(
         {
           success: false,
-          error: 'Esta dirección ya recibió $PULPA de este embajador',
-          message: 'Duplicate distribution detected',
+          error: 'NFC rate limit exceeded',
+          message: 'Too many distributions from this NFC. Please try again later.',
+          retryAfter: rateLimitInfo.retryAfter,
         },
-        { status: 409 }
+        {
+          status: 429,
+          headers: {
+            'X-RateLimit-Limit': rateLimitInfo.limit.toString(),
+            'X-RateLimit-Remaining': '0',
+            'X-RateLimit-Reset': new Date(rateLimitInfo.resetAt).toISOString(),
+            'Retry-After': rateLimitInfo.retryAfter.toString(),
+          },
+        }
+      );
+    }
+
+    // 2. Comprehensive security checks (database)
+    const securityCheck = await checkDistributionSecurity(nfcId, recipientAddress);
+
+    if (!securityCheck.allowed) {
+      // Get rate limit info for headers
+      const rateLimitInfo = nfcRateLimiter.getRateLimitInfo(nfcId);
+
+      return NextResponse.json(
+        {
+          success: false,
+          error: securityCheck.reason,
+          code: securityCheck.code,
+        },
+        {
+          status: 403,
+          headers: {
+            'X-RateLimit-Limit': rateLimitInfo.limit.toString(),
+            'X-RateLimit-Remaining': rateLimitInfo.remaining.toString(),
+            'X-RateLimit-Reset': new Date(rateLimitInfo.resetAt).toISOString(),
+          },
+        }
       );
     }
 
@@ -123,22 +153,35 @@ export async function POST(request: NextRequest) {
         return { updatedDistribution, updatedAmbassador };
       });
 
-      // Return success response
-      return NextResponse.json({
-        success: true,
-        distribution: {
-          id: result.updatedDistribution.id,
-          transactionHash: result.updatedDistribution.transactionHash,
-          ambassadorAmount: result.updatedDistribution.ambassadorAmount,
-          recipientAmount: result.updatedDistribution.recipientAmount,
-          explorerUrl: `https://optimistic.etherscan.io/tx/${result.updatedDistribution.transactionHash}`,
-          createdAt: result.updatedDistribution.createdAt.toISOString(),
+      // Record successful distribution in rate limiter
+      const remaining = nfcRateLimiter.recordRequest(nfcId);
+      const rateLimitInfo = nfcRateLimiter.getRateLimitInfo(nfcId);
+
+      // Return success response with rate limit headers
+      return NextResponse.json(
+        {
+          success: true,
+          distribution: {
+            id: result.updatedDistribution.id,
+            transactionHash: result.updatedDistribution.transactionHash,
+            ambassadorAmount: result.updatedDistribution.ambassadorAmount,
+            recipientAmount: result.updatedDistribution.recipientAmount,
+            explorerUrl: `https://optimistic.etherscan.io/tx/${result.updatedDistribution.transactionHash}`,
+            createdAt: result.updatedDistribution.createdAt.toISOString(),
+          },
+          ambassador: {
+            totalDistributions: result.updatedAmbassador.totalDistributions,
+            totalPulpaMinted: result.updatedAmbassador.totalPulpaMinted,
+          },
         },
-        ambassador: {
-          totalDistributions: result.updatedAmbassador.totalDistributions,
-          totalPulpaMinted: result.updatedAmbassador.totalPulpaMinted,
-        },
-      });
+        {
+          headers: {
+            'X-RateLimit-Limit': rateLimitInfo.limit.toString(),
+            'X-RateLimit-Remaining': remaining.toString(),
+            'X-RateLimit-Reset': new Date(rateLimitInfo.resetAt).toISOString(),
+          },
+        }
+      );
     } catch (blockchainError) {
       // Update distribution status to failed
       await prisma.distribution.update({

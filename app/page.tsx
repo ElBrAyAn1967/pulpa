@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import RoleSelector from '@/components/navigation/RoleSelector';
 
 export default function Home() {
   return (
@@ -11,6 +12,11 @@ export default function Home() {
             Sistema de distribución de tokens $PULPA mediante NFC stickers.
             Embajadores distribuyen tokens a nuevos usuarios escaneando NFC tags.
           </p>
+        </section>
+
+        {/* Role Selection Section */}
+        <section>
+          <RoleSelector />
         </section>
 
         {/* Demo Section */}
@@ -170,7 +176,7 @@ export default function Home() {
         </section>
 
         {/* Footer */}
-        <footer className="text-center text-sm text-muted-foreground pt-12 pb-8">
+        <footer className="text-center text-sm text-muted-foreground pt-12 pb-8 space-y-2">
           <p>
             Paleta de colores de{" "}
             <a
@@ -182,8 +188,16 @@ export default function Home() {
               Frutero App
             </a>
           </p>
-          <p className="mt-2">
+          <p>
             Sistema de distribución NFC para tokens $PULPA
+          </p>
+          <p className="text-xs">
+            <Link
+              href="/admin"
+              className="text-muted-foreground hover:text-primary transition-colors"
+            >
+              📊 Admin Dashboard
+            </Link>
           </p>
         </footer>
       </div>

@@ -1,0 +1,106 @@
+# GraphQL Schema for $PULPA Distribution Analytics
+# Defines the entities that will be created from indexed events
+
+"""
+Distribution event - tracks each $PULPA token minting/distribution
+"""
+type Distribution @entity {
+  id: ID! # Transaction hash + log index
+  timestamp: BigInt! # Block timestamp
+  blockNumber: BigInt! # Block number
+  transactionHash: String! # Transaction hash
+
+  # Distribution details
+  from: String! # Should be 0x0000... for minting events
+  to: String! # Recipient address
+  amount: BigInt! # Amount of tokens minted (in wei)
+
+  # Gas information
+  gasUsed: BigInt
+  gasPrice: BigInt
+
+  # Relationships
+  ambassador: Ambassador # Link to the ambassador (minter)
+  recipient: Recipient # Link to the recipient
+}
+
+"""
+Ambassador entity - tracks individual ambassadors and their stats
+"""
+type Ambassador @entity {
+  id: ID! # Wallet address (lowercase)
+  address: String! # Original case address
+
+  # Statistics
+  totalDistributions: BigInt! # Total number of distributions
+  totalPulpaMinted: BigInt! # Total PULPA minted by this ambassador
+  totalPulpaReceived: BigInt! # Total PULPA received as rewards (1 per distribution)
+
+  # Metadata
+  firstDistributionTimestamp: BigInt # When they made their first distribution
+  lastDistributionTimestamp: BigInt # When they made their last distribution
+
+  # Relationships
+  distributions: [Distribution!]! @derivedFrom(field: "ambassador")
+  roleGrants: [RoleEvent!]! @derivedFrom(field: "account")
+}
+
+"""
+Recipient entity - tracks users who received $PULPA
+"""
+type Recipient @entity {
+  id: ID! # Wallet address (lowercase)
+  address: String! # Original case address
+
+  # Statistics
+  totalReceived: BigInt! # Total PULPA received
+  distributionCount: BigInt! # Number of times received tokens
+
+  # Metadata
+  firstReceivedTimestamp: BigInt # When they first received tokens
+  lastReceivedTimestamp: BigInt # When they last received tokens
+
+  # Relationships
+  distributions: [Distribution!]! @derivedFrom(field: "recipient")
+}
+
+"""
+Role events - tracks MINTER_ROLE grants and revocations
+"""
+type RoleEvent @entity {
+  id: ID! # Transaction hash + log index
+  timestamp: BigInt! # Block timestamp
+  blockNumber: BigInt! # Block number
+  transactionHash: String! # Transaction hash
+
+  # Role details
+  role: String! # Role hash (MINTER_ROLE)
+  account: Ambassador! # Account that received/lost the role
+  sender: String! # Account that granted/revoked the role
+  eventType: RoleEventType! # GRANTED or REVOKED
+}
+
+"""
+Role event types
+"""
+enum RoleEventType {
+  GRANTED
+  REVOKED
+}
+
+"""
+Global statistics entity - aggregated stats across all ambassadors
+"""
+type GlobalStats @entity {
+  id: ID! # Always "global"
+
+  # Aggregated statistics
+  totalDistributions: BigInt! # Total distributions across all ambassadors
+  totalPulpaMinted: BigInt! # Total PULPA minted
+  totalAmbassadors: BigInt! # Total number of ambassadors
+  totalRecipients: BigInt! # Total number of unique recipients
+
+  # Metadata
+  lastUpdatedTimestamp: BigInt! # Last time stats were updated
+  lastUpdatedBlock: BigInt! # Last block where stats were updated
+}

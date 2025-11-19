@@ -51,3 +51,8 @@ coverage.json
 
 # Claude Code local settings
 .claude/settings.local.json
+
+# Envio indexer generated files
+envio/generated/
+envio/.envio/
+envio/node_modules/

@@ -1,0 +1,19 @@
+{
+  "name": "pulpa-distribution-indexer",
+  "version": "1.0.0",
+  "description": "Envio indexer for $PULPA token distribution events on Optimism",
+  "private": true,
+  "scripts": {
+    "dev": "envio dev",
+    "codegen": "envio codegen",
+    "test": "envio test",
+    "start": "envio start"
+  },
+  "dependencies": {
+    "envio": "latest"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  }
+}

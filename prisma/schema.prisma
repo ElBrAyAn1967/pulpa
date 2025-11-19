@@ -45,5 +45,17 @@ model Distribution {
   @@index([ambassadorId])
   @@index([recipientAddress])
   @@index([status])
+  @@index([createdAt])
   @@map("distributions")
+}
+
+model Blacklist {
+  id        String   @id @default(cuid())
+  address   String   @unique
+  reason    String
+  addedBy   String   // Address of admin who added it
+  createdAt DateTime @default(now())
+
+  @@index([address])
+  @@map("blacklist")
 }

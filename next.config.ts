@@ -26,6 +26,12 @@ const nextConfig: NextConfig = {
       loader: 'ignore-loader',
     });
 
+    // Exclude envio directory from compilation
+    config.module.rules.push({
+      test: /envio\//,
+      loader: 'ignore-loader',
+    });
+
     // Ignore optional React Native dependencies that aren't needed for web
     config.resolve.alias = {
       ...config.resolve.alias,
@@ -37,6 +43,7 @@ const nextConfig: NextConfig = {
     config.ignoreWarnings = [
       { module: /node_modules\/@metamask\/sdk/ },
       { module: /node_modules\/pino/ },
+      { module: /envio\// },
       /Can't resolve '@react-native-async-storage\/async-storage'/,
       /Can't resolve 'pino-pretty'/,
     ];

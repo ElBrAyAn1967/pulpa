@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  indexer:
+    build: .
+    container_name: pulpa-indexer
+    ports:
+      - "8080:8080"  # GraphQL endpoint
+    environment:
+      - NODE_ENV=production
+      - LOG_LEVEL=info
+    volumes:
+      - ./config.yaml:/app/config.yaml
+      - ./schema.graphql:/app/schema.graphql
+      - ./src:/app/src
+      # Persist Envio data
+      - envio-data:/app/.envio
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:8080/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  envio-data:
+    driver: local

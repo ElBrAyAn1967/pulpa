@@ -38,6 +38,7 @@
     "node_modules",
     "scripts/**/*",
     "test/**/*",
-    "hardhat.config.cjs"
+    "hardhat.config.cjs",
+    "envio/**/*"
   ]
 }

@@ -1,0 +1,43 @@
+# Envio Indexer Configuration for $PULPA Token on Optimism
+# This indexer tracks all PULPA token distribution events for analytics
+
+name: pulpa-distribution-indexer
+description: Indexes $PULPA token minting and distribution events on Optimism Mainnet
+
+# Database configuration
+# Envio will create tables based on the schema.graphql file
+unordered_multichain_mode: false
+
+# Networks to index
+networks:
+  - id: 10  # Optimism Mainnet
+    start_block: 0  # HyperSync will automatically find the first relevant block
+    contracts:
+      - name: PulpaToken
+        address:
+          - "0x029263aA1BE88127f1794780D9eEF453221C2f30"  # $PULPA Token Contract
+
+# Contract definitions
+contracts:
+  - name: PulpaToken
+    handler: src/EventHandlers.ts
+    events:
+      # Transfer event - we'll filter for minting (from == 0x0) in the handler
+      - event: "Transfer(address indexed from, address indexed to, uint256 value)"
+      # RoleGranted event - track MINTER_ROLE assignments
+      - event: "RoleGranted(bytes32 indexed role, address indexed account, address indexed sender)"
+      # RoleRevoked event - track MINTER_ROLE revocations
+      - event: "RoleRevoked(bytes32 indexed role, address indexed account, address indexed sender)"
+
+# Field selection for additional blockchain data
+field_selection:
+  transaction_fields:
+    - "from"
+    - "to"
+    - "hash"
+    - "gas_used"
+    - "gas_price"
+  block_fields:
+    - "timestamp"
+    - "number"
+    - "hash"
