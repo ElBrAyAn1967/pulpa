@@ -18,7 +18,7 @@ export interface Ambassador {
 export interface NFCStatus {
   nfcId: string;
   isRegistered: boolean;
-  ambassador?: Omit<Ambassador, 'createdAt' | 'updatedAt'>;
+  ambassador?: Ambassador;
 }
 
 export interface AmbassadorRegistrationData {

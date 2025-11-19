@@ -28,6 +28,7 @@ export async function GET(
       where: { nfcId },
       select: {
         id: true,
+        nfcId: true,
         displayName: true,
         walletAddress: true,
         ensName: true,
@@ -44,6 +45,7 @@ export async function GET(
       isRegistered: !!ambassador,
       ambassador: ambassador ? {
         ...ambassador,
+        ensName: ambassador.ensName || undefined,
         createdAt: ambassador.createdAt.toISOString(),
         updatedAt: ambassador.updatedAt.toISOString(),
       } : undefined,

@@ -22,7 +22,9 @@
       "Bash(bunx prisma init:*)",
       "Bash(npx prisma:*)",
       "Bash(PRISMA_USER_CONSENT_FOR_DANGEROUS_AI_ACTION=\"si\" npx prisma migrate reset:*)",
-      "Bash(bun run:*)"
+      "Bash(bun run:*)",
+      "Bash(bunx prisma migrate:*)",
+      "Bash(bunx prisma generate:*)"
     ],
     "deny": [],
     "ask": []

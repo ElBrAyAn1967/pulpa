@@ -84,12 +84,12 @@ export async function POST(request: NextRequest) {
 
     // Handle validation errors
     if (error instanceof ZodError) {
-      console.log('Handling ZodError with errors:', error.errors);
+      console.log('Handling ZodError with issues:', error.issues);
       return NextResponse.json(
         {
           error: 'VALIDATION_ERROR',
           message: 'Datos de entrada inválidos',
-          details: error.errors?.map((err) => ({
+          details: error.issues?.map((err) => ({
             field: err.path.join('.'),
             message: err.message,
           })) || [],

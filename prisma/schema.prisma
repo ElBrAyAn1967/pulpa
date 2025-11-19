@@ -30,22 +30,20 @@ model Ambassador {
 }
 
 model Distribution {
-  id            String    @id @default(cuid())
-  ambassadorId  String
-  ambassador    Ambassador @relation(fields: [ambassadorId], references: [id])
-  
-  recipientAddress String
-  pulpaAmount      String  // BigInt as string (5 PULPA for recipient)
-  ambassadorReward String  // BigInt as string (1 PULPA for ambassador)
-  
-  txHash           String  @unique
-  blockNumber      BigInt
-  timestamp        DateTime
-  
-  createdAt        DateTime @default(now())
+  id                String    @id @default(cuid())
+  ambassadorId      String
+  recipientAddress  String
+  ambassadorAmount  String    // "1" $PULPA
+  recipientAmount   String    // "5" $PULPA
+  transactionHash   String?
+  status            String    @default("pending") // pending, success, failed
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  ambassador        Ambassador @relation(fields: [ambassadorId], references: [id])
 
   @@index([ambassadorId])
   @@index([recipientAddress])
-  @@index([timestamp])
+  @@index([status])
   @@map("distributions")
 }
