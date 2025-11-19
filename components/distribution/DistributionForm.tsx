@@ -10,6 +10,11 @@ interface DistributionFormProps {
   onSuccess?: (data: {
     transactionHash: string;
     explorerUrl: string;
+    recipientAddress: string;
+    ambassadorAmount: string;
+    recipientAmount: string;
+    totalDistributions: number;
+    totalPulpaMinted: string;
   }) => void;
 }
 
@@ -115,10 +120,15 @@ export default function DistributionForm({
       setAddressInput('');
       setResolvedAddress(null);
 
-      if (onSuccess && data.distribution) {
+      if (onSuccess && data.distribution && data.ambassador) {
         onSuccess({
           transactionHash: data.distribution.transactionHash,
           explorerUrl: data.distribution.explorerUrl,
+          recipientAddress: targetAddress,
+          ambassadorAmount: data.distribution.ambassadorAmount,
+          recipientAmount: data.distribution.recipientAmount,
+          totalDistributions: data.ambassador.totalDistributions,
+          totalPulpaMinted: data.ambassador.totalPulpaMinted,
         });
       }
     } catch (err) {

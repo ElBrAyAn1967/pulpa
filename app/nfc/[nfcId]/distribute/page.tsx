@@ -4,6 +4,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { AmbassadorProfile } from '@/components/ambassador';
 import DistributionForm from '@/components/distribution/DistributionForm';
+import DistributionSuccess from '@/components/distribution/DistributionSuccess';
 import type { Ambassador } from '@/lib/types/ambassador';
 
 export default function DistributionPage() {
@@ -14,8 +15,15 @@ export default function DistributionPage() {
   const [ambassador, setAmbassador] = useState<Ambassador | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [showSuccess, setShowSuccess] = useState(false);
-  const [transactionUrl, setTransactionUrl] = useState<string | null>(null);
+  const [distributionResult, setDistributionResult] = useState<{
+    transactionHash: string;
+    explorerUrl: string;
+    recipientAddress: string;
+    ambassadorAmount: string;
+    recipientAmount: string;
+    totalDistributions: number;
+    totalPulpaMinted: string;
+  } | null>(null);
 
   useEffect(() => {
     async function fetchAmbassador() {
@@ -120,53 +128,40 @@ export default function DistributionPage() {
 
         {/* Distribution Section */}
         <div className="bg-card rounded-lg border border-border p-6 space-y-6">
-          <div className="space-y-2">
-            <h3 className="text-xl font-bold text-foreground">
-              Distribución de $PULPA
-            </h3>
-            <p className="text-muted-foreground">
-              Distribuye tokens $PULPA a nuevos usuarios. El embajador recibe 1 $PULPA y el usuario recibe 5 $PULPA.
-            </p>
-          </div>
+          {distributionResult ? (
+            <DistributionSuccess
+              transactionHash={distributionResult.transactionHash}
+              explorerUrl={distributionResult.explorerUrl}
+              recipientAddress={distributionResult.recipientAddress}
+              ambassadorAmount={distributionResult.ambassadorAmount}
+              recipientAmount={distributionResult.recipientAmount}
+              totalDistributions={distributionResult.totalDistributions}
+              totalPulpaMinted={distributionResult.totalPulpaMinted}
+              onDistributeAgain={() => {
+                setDistributionResult(null);
+                // Refresh ambassador data to show updated statistics
+                window.location.reload();
+              }}
+            />
+          ) : (
+            <>
+              <div className="space-y-2">
+                <h3 className="text-xl font-bold text-foreground">
+                  Distribución de $PULPA
+                </h3>
+                <p className="text-muted-foreground">
+                  Distribuye tokens $PULPA a nuevos usuarios. El embajador recibe 1 $PULPA y el usuario recibe 5 $PULPA.
+                </p>
+              </div>
 
-          {showSuccess && transactionUrl && (
-            <div className="p-4 bg-green-50 border border-green-200 rounded-lg space-y-3">
-              <p className="text-sm text-green-600 font-semibold">
-                ✅ Distribución exitosa
-              </p>
-              <a
-                href={transactionUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-sm text-blue-600 hover:text-blue-800 underline"
-              >
-                Ver transacción en Optimism Explorer
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                  />
-                </svg>
-              </a>
-            </div>
+              <DistributionForm
+                nfcId={nfcId}
+                onSuccess={(data) => {
+                  setDistributionResult(data);
+                }}
+              />
+            </>
           )}
-
-          <DistributionForm
-            nfcId={nfcId}
-            onSuccess={(data) => {
-              setShowSuccess(true);
-              setTransactionUrl(data.explorerUrl);
-              // Refresh ambassador data to show updated statistics
-              window.location.reload();
-            }}
-          />
         </div>
       </div>
     </div>
