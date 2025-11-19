@@ -3,6 +3,12 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   reactStrictMode: true,
 
+  // TypeScript configuration for build
+  typescript: {
+    // Ignore type errors during build (only for Vercel deployment issues)
+    ignoreBuildErrors: false,
+  },
+
   // Empty turbopack config to silence the error (we're using webpack for builds)
   turbopack: {},
 
