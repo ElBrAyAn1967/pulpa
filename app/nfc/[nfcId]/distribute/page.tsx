@@ -1,17 +1,21 @@
 'use client';
 
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { AmbassadorProfile } from '@/components/ambassador';
+import DistributionForm from '@/components/distribution/DistributionForm';
 import type { Ambassador } from '@/lib/types/ambassador';
 
 export default function DistributionPage() {
   const params = useParams();
+  const router = useRouter();
   const nfcId = params.nfcId as string;
 
   const [ambassador, setAmbassador] = useState<Ambassador | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [transactionUrl, setTransactionUrl] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchAmbassador() {
@@ -114,33 +118,55 @@ export default function DistributionPage() {
         {/* Ambassador Profile */}
         <AmbassadorProfile ambassador={ambassador} />
 
-        {/* Distribution Section (Coming Soon) */}
-        <div className="bg-card rounded-lg border border-border p-6 space-y-4">
-          <div className="inline-block px-4 py-2 bg-accent/10 rounded-lg">
-            <span className="text-sm font-medium text-accent">
-              🚧 Próximamente (Ticket 2.x)
-            </span>
+        {/* Distribution Section */}
+        <div className="bg-card rounded-lg border border-border p-6 space-y-6">
+          <div className="space-y-2">
+            <h3 className="text-xl font-bold text-foreground">
+              Distribución de $PULPA
+            </h3>
+            <p className="text-muted-foreground">
+              Distribuye tokens $PULPA a nuevos usuarios. El embajador recibe 1 $PULPA y el usuario recibe 5 $PULPA.
+            </p>
           </div>
-          <h3 className="text-xl font-bold text-foreground">
-            Distribución de $PULPA
-          </h3>
-          <p className="text-muted-foreground">
-            Funcionalidades por implementar:
-          </p>
-          <ul className="space-y-2 text-sm text-muted-foreground">
-            <li className="flex items-start gap-2">
-              <span className="text-primary mt-1">•</span>
-              <span>Formulario para ingresar dirección del nuevo usuario</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-primary mt-1">•</span>
-              <span>Distribución de tokens (1 $PULPA al embajador, 5 $PULPA al usuario)</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-primary mt-1">•</span>
-              <span>Historial de distribuciones</span>
-            </li>
-          </ul>
+
+          {showSuccess && transactionUrl && (
+            <div className="p-4 bg-green-50 border border-green-200 rounded-lg space-y-3">
+              <p className="text-sm text-green-600 font-semibold">
+                ✅ Distribución exitosa
+              </p>
+              <a
+                href={transactionUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-sm text-blue-600 hover:text-blue-800 underline"
+              >
+                Ver transacción en Optimism Explorer
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                  />
+                </svg>
+              </a>
+            </div>
+          )}
+
+          <DistributionForm
+            nfcId={nfcId}
+            onSuccess={(data) => {
+              setShowSuccess(true);
+              setTransactionUrl(data.explorerUrl);
+              // Refresh ambassador data to show updated statistics
+              window.location.reload();
+            }}
+          />
         </div>
       </div>
     </div>

@@ -237,5 +237,7 @@ class TreasuryService {
   }
 }
 
-// Export singleton instance
-export const treasuryService = TreasuryService.getInstance();
+// Export getter function to avoid initialization during build
+export function getTreasuryService(): TreasuryService {
+  return TreasuryService.getInstance();
+}
