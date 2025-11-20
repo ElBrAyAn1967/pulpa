@@ -37,4 +37,8 @@ export const PULPA_TOKEN_ABI = [
   },
 ] as const;
 
-export const PULPA_TOKEN_ADDRESS = '0x029263aA1BE88127f1794780D9eEF453221C2f30' as const;
+// Get token address from environment variable or use default (testnet address)
+export const PULPA_TOKEN_ADDRESS = (
+  process.env.NEXT_PUBLIC_TOKEN_ADDRESS ||
+  '0x029263aA1BE88127f1794780D9eEF453221C2f30'
+) as `0x${string}`;
